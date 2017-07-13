@@ -12,14 +12,14 @@ namespace Tests
         [SetUp]
         public void SetDriver()
         {
-            Driver.SetDriver(AllDrivers.FireFox);
+            Driver.SetDriver(AllDrivers.Chrome);
         }
 
         [Test]
         public void ValidLogin()
         {
             bool actual = LogicSteps.NavigateToPage(@"https://journals.lww.com").LoginAs("Vladtest", "1234qwer").IsValidLogin();
-            Assert.AreEqual(false, actual);
+            Assert.AreEqual(true, actual);
         }
 
         [Test]

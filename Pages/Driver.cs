@@ -13,11 +13,5 @@ namespace Pages
         {
             driverInsanse = StaticDriverFactory.GetWebDriver(driver);
         }
-
-        public static IWebDriver GetDriver()
-        {
-            return driverInsanse;
-        }
-
     }
 }

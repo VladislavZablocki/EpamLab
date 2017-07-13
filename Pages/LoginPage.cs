@@ -8,17 +8,20 @@ namespace Pages
     public class LoginPage : BasePage
     {
         private WebDriverWait wait;
-        private string errorMessageClassName = "ej-error-message";
+        //private string errorMessagetext = " Invalid username or password.  Try again or register an account. ";
+        private string errorMessageXpath = @"//p[@class='ej-error-message-icon']";
 
-        [FindsBy(How = How.Id,Using = @"ctl00_ctl45_g_e504d159_38de_4cbf_9f4d_b2c12b300979_ctl00_txt_UserName")]
+        [FindsBy(How = How.XPath, Using = @"//div[@class='form-group'][1]/input")]
         public IWebElement UserLogin { get; set; }
 
-        [FindsBy(How = How.Id, Using = @"ctl00_ctl45_g_e504d159_38de_4cbf_9f4d_b2c12b300979_ctl00_txt_Password")]
+        [FindsBy(How = How.XPath, Using = @"//div[@class='form-group'][2]/input")]
         public IWebElement UserPassword { get; set; }
 
-        [FindsBy(How = How.Id, Using = @"ctl00_ctl45_g_e504d159_38de_4cbf_9f4d_b2c12b300979_ctl00_LoginButton")]
+        [FindsBy(How = How.XPath, Using = @"//div[@id]/input[@type='submit']")]
         public IWebElement LoginButton { get; set; }
 
+        //[FindsBy(How = How.XPath, Using = @"//p[@class='ej-error-message-icon']")]
+        //public IWebElement ErrorMessage { get; set; }
         public LoginPage()
         {
             PageFactory.InitElements(this.driver, this);
@@ -35,14 +38,15 @@ namespace Pages
 
         public bool IsValidLogin()
         {
-            bool result = true;
+            bool result = false;
             try
             {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName(errorMessageClassName)));
+                driver.FindElement(By.XPath(errorMessageXpath));
+                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(errorMessageXpath)));
             }
             catch (WebDriverTimeoutException)
             {
-                result = false;
+                result = true;
             }
             return result;
         }
