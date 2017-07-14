@@ -7,11 +7,11 @@ namespace Pages
         private Driver()
         { }
 
-        public static IWebDriver driverInsanse;
+        public static IWebDriver DriverInstance;
 
         public static void SetDriver(AllDrivers driver)
         {
-            driverInsanse = StaticDriverFactory.GetWebDriver(driver);
+            DriverInstance = StaticDriverFactory.GetWebDriver(driver);
         }
     }
 }

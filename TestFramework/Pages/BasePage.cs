@@ -1,11 +1,12 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Pages
 {
-    public class BasePage
+    public abstract class BasePage
     {
         public string Title { get; set; }
-
-        protected IWebDriver driver = Driver.driverInsanse;
+        public IWebDriver driver = Driver.DriverInstance;
+        public WebDriverWait Wait;
     }
 }
