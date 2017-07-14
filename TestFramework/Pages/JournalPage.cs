@@ -10,7 +10,7 @@ namespace Pages
         public JournalPage()
         {
             this.Title = "A & A Case Reports";
-            this.Wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(10));
+            this.Wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(20));
         }
     }
 }

@@ -43,10 +43,15 @@ namespace Pages
             IWebElement firstJournal = page.driver.FindElement(By.XPath(firstJornalLinkXpath));
             firstJournal.Click();
             JournalPage journalPage = new JournalPage();
-            journalPage.Wait.Until(Equals(journalPage.Title, page.driver.Title));
-            //var tab = page.driver.WindowHandles;
-            //page.driver.SwitchTo().Window(tab[0]);
-            return new JournalPage;
+            CloseTab(page, 0);
+            return journalPage;
+        }
+
+        public static void CloseTab(BasePage page,int number)
+        {
+            var tab = page.driver.WindowHandles;
+            page.driver.SwitchTo().Window(tab[number]);
+            Close(page);
         }
 
         public static void Close(BasePage page)
