@@ -12,7 +12,7 @@ namespace Tests
         [SetUp]
         public void SetDriver()
         {
-            Driver.SetDriver(AllDrivers.Chrome);
+            Driver.SetDriver(AllDrivers.FireFox);
         }
 
         [Test]
@@ -41,7 +41,24 @@ namespace Tests
             JournalPage page = LogicSteps.GoToFirstJournal(
                 LogicSteps.LoginAs(
                     LogicSteps.NavigateToPage(@"http://journals.lww.com"), "Vladtest", "1234qwer"));
-            //LogicSteps.Close(page);
+            LogicSteps.AddFirstArticleToFavoritesFolderFromList(page,"new");
+        }
+
+        [Test]
+        public void TestFromArticle()
+        {
+            JournalPage page = LogicSteps.GoToFirstJournal(
+                LogicSteps.LoginAs(
+                    LogicSteps.NavigateToPage(@"http://journals.lww.com"), "Vladtest", "1234qwer"));
+            LogicSteps.AddFirstArticleToFavoritesFolderFromArticle(page, "new");
+        }
+
+        [Test]
+        public void GoToPlasticAndReconstructiveSurgeryJournaltest()
+        {
+            JournalPlasticReconstructiveSurgeryPage page = LogicSteps.GoToJournalPlasticReconstructiveSurgery(
+                LogicSteps.LoginAs(
+                    LogicSteps.NavigateToPage(@"http://journals.lww.com"), "Vladtest", "1234qwer"));
         }
     }
 }

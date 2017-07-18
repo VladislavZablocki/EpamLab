@@ -1,0 +1,7 @@
+﻿
+namespace Pages
+{
+    class MyFavoritesPage
+    {
+    }
+}

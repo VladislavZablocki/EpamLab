@@ -8,7 +8,6 @@ namespace Pages
     {
         private static string invalidLoginXpath = @"//li/a[text()='Login']";
         private static string validLoginXpath = @"//li/a[text()='Log Out']";
-        private static string firstJornalLinkXpath = @"//article[1]/h4/a";
 
 
         public static LoginPage NavigateToPage(string url)
@@ -42,13 +41,53 @@ namespace Pages
         public static JournalPage GoToFirstJournal(LoginPage page)
         {
             page.Wait.Until(ExpectedConditions.ElementExists(By.XPath(validLoginXpath)));
-            IWebElement firstJournal = page.driver.FindElement(By.XPath(firstJornalLinkXpath));
-            firstJournal.Click();
+            page.FirstJournalLink.Click();
             page.driver.SwitchTo().Window(page.driver.WindowHandles.Last());
             JournalPage journalPage = new JournalPage();
-            //CloseTab(page, 0);
-            
             return journalPage;
+        }
+
+        public static JournalPlasticReconstructiveSurgeryPage GoToJournalPlasticReconstructiveSurgery(LoginPage page)
+        {
+            page.Wait.Until(ExpectedConditions.ElementExists(By.XPath(validLoginXpath)));
+            page.PButton.Click();
+            JournalPlasticReconstructiveSurgeryPage journalPage = new JournalPlasticReconstructiveSurgeryPage();
+            page.JournalPlasticReconstructiveSurgeyryLink.Click();
+            return journalPage;
+        }
+
+        public static void AddFirstArticleToFavoritesFolderFromList(JournalPage page,string folderName)
+        {
+            page.FirstArticleAddToFavorites.Click();
+            page.WindowAddToFolder = new WindowAddToFolder();
+            CreateNewFolder(page, folderName);
+            page.WindowAddToFolder.AddItemButton.Click();
+            page.WindowOperationStatus = new WindowOperationStatus();
+            page.WindowOperationStatus.GoToFavoritesButton.Click();
+        }
+
+        public static void AddFirstArticleToFavoritesFolderFromArticle(JournalPage page, string folderName)
+        {
+            page.FirstArticleLink.Click();
+            FirstArticlePage firstArticlePage = new FirstArticlePage();
+            firstArticlePage.AddToFavorites.Click();
+            firstArticlePage.WindowAddToFolder = new WindowAddToFolder();
+            CreateNewFolder(firstArticlePage, folderName);
+            firstArticlePage.WindowAddToFolder.AddItemButton.Click();
+            firstArticlePage.WindowOperationStatus = new WindowOperationStatus();
+            firstArticlePage.WindowOperationStatus.GoToFavoritesButton.Click();
+
+        }
+
+        //2 same methods. refactoring
+        public static void CreateNewFolder(JournalPage page,string folderName)
+        {
+            page.WindowAddToFolder.InputFolderNameTextbox.SendKeys(folderName);
+        }
+
+        public static void CreateNewFolder(FirstArticlePage page, string folderName)
+        {
+            page.WindowAddToFolder.InputFolderNameTextbox.SendKeys(folderName);
         }
 
         public static void CloseTab(BasePage page,int number)
