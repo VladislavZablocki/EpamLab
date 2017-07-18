@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using System.Linq;
+
 namespace Pages
 {
     public class LogicSteps
@@ -42,8 +44,10 @@ namespace Pages
             page.Wait.Until(ExpectedConditions.ElementExists(By.XPath(validLoginXpath)));
             IWebElement firstJournal = page.driver.FindElement(By.XPath(firstJornalLinkXpath));
             firstJournal.Click();
+            page.driver.SwitchTo().Window(page.driver.WindowHandles.Last());
             JournalPage journalPage = new JournalPage();
-            CloseTab(page, 0);
+            //CloseTab(page, 0);
+            
             return journalPage;
         }
 

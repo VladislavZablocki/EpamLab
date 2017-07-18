@@ -12,7 +12,7 @@ namespace Tests
         [SetUp]
         public void SetDriver()
         {
-            Driver.SetDriver(AllDrivers.FireFox);
+            Driver.SetDriver(AllDrivers.Chrome);
         }
 
         [Test]
