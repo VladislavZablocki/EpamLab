@@ -1,7 +1,0 @@
-﻿
-namespace Pages
-{
-    class MyFavoritesPage
-    {
-    }
-}

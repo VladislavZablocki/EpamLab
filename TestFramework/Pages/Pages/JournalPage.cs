@@ -18,7 +18,6 @@ namespace Pages
 
         public JournalPage()
         {
-            this.Title = "Case Reports";
             this.Wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(20));
             Wait.Until(ExpectedConditions.ElementExists(By.XPath(@"//div[@id='main-container-content']")));
             PageFactory.InitElements(this.driver, this);
