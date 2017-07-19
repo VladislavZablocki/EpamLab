@@ -22,7 +22,7 @@ namespace Pages
         public IWebElement PButton { get; set; }
 
         [FindsBy(How =How.XPath,Using = @"//h4/a[text()='A&A Case Reports']")]
-        public IWebElement FirstJournalLink { get; set; }
+        public IWebElement JournalAACaseReportslLink { get; set; }
 
         [FindsBy(How = How.XPath,Using = @"//h4/a[text()='Plastic and Reconstructive Surgery']")]
         public IWebElement JournalPlasticReconstructiveSurgeyryLink { get; set; }

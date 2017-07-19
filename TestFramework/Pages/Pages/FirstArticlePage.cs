@@ -18,7 +18,6 @@ namespace Pages
         public FirstArticlePage()
         {
             this.Wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(20));
-            //Wait.Until(ExpectedConditions.ElementExists(By.XPath(@"//section[@id='wpArticleTools']")));
             Wait.Until(ExpectedConditions.ElementExists(By.XPath(@"//section[@id='wpArticleTools']")));
             PageFactory.InitElements(this.driver, this);
         }

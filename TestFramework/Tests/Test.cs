@@ -38,19 +38,21 @@ namespace Tests
         [Test]
         public void GoFirstLink()
         {
-            JournalPage page = LogicSteps.GoToFirstJournal(
+            JournalAACaseReportsPage page = LogicSteps.GoToJournalAACaseReports(
                 LogicSteps.LoginAs(
                     LogicSteps.NavigateToPage(@"http://journals.lww.com"), "Vladtest", "1234qwer"));
             LogicSteps.AddFirstArticleToFavoritesFolderFromList(page,"new");
+            LogicSteps.Close(page);
         }
 
         [Test]
         public void TestFromArticle()
         {
-            JournalPage page = LogicSteps.GoToFirstJournal(
+            JournalAACaseReportsPage page = LogicSteps.GoToJournalAACaseReports(
                 LogicSteps.LoginAs(
                     LogicSteps.NavigateToPage(@"http://journals.lww.com"), "Vladtest", "1234qwer"));
             LogicSteps.AddFirstArticleToFavoritesFolderFromArticle(page, "new");
+            LogicSteps.Close(page);
         }
 
         [Test]
@@ -59,6 +61,7 @@ namespace Tests
             JournalPlasticReconstructiveSurgeryPage page = LogicSteps.GoToJournalPlasticReconstructiveSurgery(
                 LogicSteps.LoginAs(
                     LogicSteps.NavigateToPage(@"http://journals.lww.com"), "Vladtest", "1234qwer"));
+            LogicSteps.Close(page);
         }
     }
 }

@@ -38,12 +38,12 @@ namespace Pages
             return result;
         }
 
-        public static JournalPage GoToFirstJournal(LoginPage page)
+        public static JournalAACaseReportsPage GoToJournalAACaseReports(LoginPage page)
         {
             page.Wait.Until(ExpectedConditions.ElementExists(By.XPath(validLoginXpath)));
-            page.FirstJournalLink.Click();
+            page.JournalAACaseReportslLink.Click();
             page.driver.SwitchTo().Window(page.driver.WindowHandles.Last());
-            JournalPage journalPage = new JournalPage();
+            JournalAACaseReportsPage journalPage = new JournalAACaseReportsPage();
             return journalPage;
         }
 
@@ -56,7 +56,7 @@ namespace Pages
             return journalPage;
         }
 
-        public static void AddFirstArticleToFavoritesFolderFromList(JournalPage page,string folderName)
+        public static void AddFirstArticleToFavoritesFolderFromList(JournalAACaseReportsPage page,string folderName)
         {
             page.FirstArticleAddToFavorites.Click();
             page.WindowAddToFolder = new WindowAddToFolder();
@@ -66,7 +66,7 @@ namespace Pages
             page.WindowOperationStatus.GoToFavoritesButton.Click();
         }
 
-        public static void AddFirstArticleToFavoritesFolderFromArticle(JournalPage page, string folderName)
+        public static void AddFirstArticleToFavoritesFolderFromArticle(JournalAACaseReportsPage page, string folderName)
         {
             page.FirstArticleLink.Click();
             FirstArticlePage firstArticlePage = new FirstArticlePage();
@@ -80,7 +80,7 @@ namespace Pages
         }
 
         //2 same methods. refactoring
-        public static void CreateNewFolder(JournalPage page,string folderName)
+        public static void CreateNewFolder(JournalAACaseReportsPage page,string folderName)
         {
             page.WindowAddToFolder.InputFolderNameTextbox.SendKeys(folderName);
         }
@@ -88,13 +88,6 @@ namespace Pages
         public static void CreateNewFolder(FirstArticlePage page, string folderName)
         {
             page.WindowAddToFolder.InputFolderNameTextbox.SendKeys(folderName);
-        }
-
-        public static void CloseTab(BasePage page,int number)
-        {
-            var tab = page.driver.WindowHandles;
-            page.driver.SwitchTo().Window(tab[number]);
-            Close(page);
         }
 
         public static void Close(BasePage page)
