@@ -115,6 +115,7 @@ namespace Pages
 
         public static bool IsResultsCountMoreThanHundred(this SearchingPage page)
         {
+            page.Wait.Until(ExpectedConditions.ElementExists(By.XPath("//div[@class='resultCount']")));
             return int.Parse(page.SearchingResultsCount.Text.Replace("results", string.Empty)) > 100;
         }
 

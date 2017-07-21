@@ -14,7 +14,7 @@ namespace Tests
         public void CreateDictionary()
         {
             Type type = typeof(TestSearch);
-            Driver.SetDriver(AllDrivers.FireFox);
+            Driver.SetDriver(AllDrivers.Chrome);
             foreach (var method in type.GetMethods())
             {
                 if (method.Name != "CreateDictionary" && method.ReturnType.Name == "Void")
@@ -25,9 +25,11 @@ namespace Tests
         }
 
         [Test]
+        [Parallelizable]
         public void SearchWord_ResultsMoreThanHundred_True()
         {
             IWebDriver driver = Driver.GetDriver(MethodBase.GetCurrentMethod().Name);
+            driver.Manage().Window.Maximize();
             bool actual = LogicSteps.NavigateToPage(driver, ConfigurationManager.AppSettings["url"])
                 .LoginAs(ConfigurationManager.AppSettings["ValidLogin"], ConfigurationManager.AppSettings["ValidPassword"])
                 .ChooseBeginningSymbol(ConfigurationManager.AppSettings["BeginningSymbol"])
@@ -38,9 +40,11 @@ namespace Tests
         }
 
         [Test]
+        [Parallelizable]
         public void SearchWord_ResultsCountOnSecondPageSixty_True()
         {
             IWebDriver driver = Driver.GetDriver(MethodBase.GetCurrentMethod().Name);
+            driver.Manage().Window.Maximize();
             bool actual = LogicSteps.NavigateToPage(driver, ConfigurationManager.AppSettings["url"])
                 .LoginAs(ConfigurationManager.AppSettings["ValidLogin"], ConfigurationManager.AppSettings["ValidPassword"])
                 .ChooseBeginningSymbol(ConfigurationManager.AppSettings["BeginningSymbol"])
