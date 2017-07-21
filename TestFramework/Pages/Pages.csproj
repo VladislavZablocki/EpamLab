@@ -57,13 +57,14 @@
     <Compile Include="Pages\ArticlePage.cs" />
     <Compile Include="LogicSteps.cs" />
     <Compile Include="Pages\LoginPage.cs" />
-    <Compile Include="Pages\MyFavoritesArticlesPage.cs" />
+    <Compile Include="Pages\MyFoldersPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Driver\StaticDriverFactory.cs" />
     <Compile Include="PopUpWindows\WindowAddToFolder.cs" />
     <Compile Include="PopUpWindows\WindowOperationStatus.cs" />
     <Compile Include="PopUpWindows\WindowDeleteFolder.cs" />
     <Compile Include="Pages\SearchingPage.cs" />
+    <Compile Include="PopUpWindows\WindowSaveSearch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

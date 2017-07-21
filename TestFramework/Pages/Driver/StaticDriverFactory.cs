@@ -22,6 +22,7 @@ namespace Pages
                     driver = new FirefoxDriver();
                     break;
             }
+            driver.Manage().Window.Maximize();
             return driver;
         }
     }

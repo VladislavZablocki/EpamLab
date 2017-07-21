@@ -29,12 +29,14 @@ namespace Tests
         public void AddToFavoriteFromList()
         {
             IWebDriver driver = Driver.GetDriver(MethodBase.GetCurrentMethod().Name);
-            MyFavoritesArticlesPage page = LogicSteps.NavigateToPage(driver, ConfigurationManager.AppSettings["url"])
+            MyFoldersPage page = LogicSteps.NavigateToPage(driver, ConfigurationManager.AppSettings["url"])
                 .LoginAs(ConfigurationManager.AppSettings["ValidLogin"], ConfigurationManager.AppSettings["ValidPassword"])
                 .GoToJournal(ConfigurationManager.AppSettings["JournalNameAACaseReports"])
-                .AddFirstArticleToFavoritesFromList(ConfigurationManager.AppSettings["ArticleNameSpinCordSrimulation"], ConfigurationManager.AppSettings["FolderName1"]);
+                .AddFirstArticleToFavoritesFromList(ConfigurationManager.AppSettings["ArticleNameSpinCordSrimulation"], ConfigurationManager.AppSettings["FolderName1"])
+                .GoFolder(ConfigurationManager.AppSettings["FolderName1"]);
             bool actual = page.IsArticleInFavorites(ConfigurationManager.AppSettings["ArticleNameSpinCordSrimulation"]);
             page.DeleteFolder();
+            page.Close();
             Assert.AreEqual(true, actual);
         }
 
@@ -43,13 +45,16 @@ namespace Tests
         public void AddToFavoriteFromArticle()
         {
             IWebDriver driver = Driver.GetDriver(MethodBase.GetCurrentMethod().Name);
-            MyFavoritesArticlesPage page = LogicSteps.NavigateToPage(driver, ConfigurationManager.AppSettings["url"])
+            MyFoldersPage page = LogicSteps.NavigateToPage(driver, ConfigurationManager.AppSettings["url"])
                 .LoginAs(ConfigurationManager.AppSettings["ValidLogin"], ConfigurationManager.AppSettings["ValidPassword"])
                 .GoToJournal(ConfigurationManager.AppSettings["JournalNameAACaseReports"])
-                .AddFirstArticleToFavoritesFolderFromArticle(ConfigurationManager.AppSettings["ArticleNameSpinCordSrimulation"], ConfigurationManager.AppSettings["FolderName2"]);
+                .AddFirstArticleToFavoritesFolderFromArticle(ConfigurationManager.AppSettings["ArticleNameSpinCordSrimulation"], ConfigurationManager.AppSettings["FolderName2"])
+                .GoFolder(ConfigurationManager.AppSettings["FolderName2"]);
             bool actual = page.IsArticleInFavorites(ConfigurationManager.AppSettings["ArticleNameSpinCordSrimulation"]);
             page.DeleteFolder();
+            page.Close();
             Assert.AreEqual(true, actual);
+
         }
     }
 }

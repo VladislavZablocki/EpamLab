@@ -15,12 +15,6 @@ namespace Pages
 
         [FindsBy(How = How.XPath, Using = @"//div[@id]/input[@type='submit']")]
         public IWebElement LoginButton { get; set; }
- 
-        [FindsBy(How = How.XPath, Using = @"//span[contains(@id,'UserActionsToolbar_lblAccount')]")]
-        public IWebElement UserActionToolBar { get; set; }
-
-        [FindsBy(How = How.XPath,Using = @"//a[contains(@id,'ucUserActionsToolbar_lnkMyFavorites')]")]
-        public IWebElement FavoriteLink { get; set; }
 
         public IWebElement PButton;
 

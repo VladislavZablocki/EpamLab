@@ -14,6 +14,15 @@ namespace Pages
         [FindsBy(How = How.XPath, Using = @"//div[@class='wp-feature-articles']/div/article")]
         public IList<IWebElement> SearchingResults { get; set; }
 
+        [FindsBy(How = How.XPath,Using = @"(//input[@value='Save Search'])[1]")]
+        public IWebElement SaveButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = @"//span[contains(@id,'UserActionsToolbar_lblAccount')]")]
+        public IWebElement UserActionToolBar { get; set; }
+
+        [FindsBy(How = How.XPath, Using = @"//a[contains(@id,'ucUserActionsToolbar_lnkSavedSearches')]")]
+        public IWebElement SaveFolderToolBarButton { get; set; }
+
         public SearchingPage(IWebDriver driver)
         {
             this.driver = driver;

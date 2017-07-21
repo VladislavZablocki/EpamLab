@@ -19,6 +19,7 @@ namespace Pages
 
         public static LoginPage LoginAs(this LoginPage page, string login, string password)
         {
+            page.driver.Manage().Window.Maximize();
             page.UserLogin.SendKeys(login);
             page.UserPassword.SendKeys(password);
             page.LoginButton.Click();
@@ -55,18 +56,19 @@ namespace Pages
             return journalPage;
         }
         
-        public static MyFavoritesArticlesPage AddFirstArticleToFavoritesFromList(this JournalPage page,string articleName, string folderName)
+        public static MyFoldersPage AddFirstArticleToFavoritesFromList(this JournalPage page,string articleName, string folderName)
         {
             page.GetAddToFavoritesLinkFromListByArticleName(articleName).Click();
             page.WindowAddToFolder = new WindowAddToFolder(page.driver);
             CreateNewFolder(page.WindowAddToFolder, folderName);
             page.WindowAddToFolder.AddItemButton.Click();
+            page.Wait.Until(ExpectedConditions.ElementExists(By.XPath("//input[@value='Go to My Favorites']")));
             page.WindowOperationStatus = new WindowOperationStatus(page.driver);
             page.WindowOperationStatus.GoToFavoritesButton.Click();
-            return new MyFavoritesArticlesPage(page.driver);
+            return new MyFoldersPage(page.driver);
         }
 
-        public static MyFavoritesArticlesPage AddFirstArticleToFavoritesFolderFromArticle(this JournalPage page, string articleName, string folderName)
+        public static MyFoldersPage AddFirstArticleToFavoritesFolderFromArticle(this JournalPage page, string articleName, string folderName)
         {
             page.GetArticleLinkByName(articleName).Click();
             ArticlePage firstArticlePage = new ArticlePage(page.driver);
@@ -74,12 +76,19 @@ namespace Pages
             firstArticlePage.WindowAddToFolder = new WindowAddToFolder(page.driver);
             CreateNewFolder(firstArticlePage.WindowAddToFolder, folderName);
             firstArticlePage.WindowAddToFolder.AddItemButton.Click();
+            firstArticlePage.Wait.Until(ExpectedConditions.ElementExists(By.XPath("//input[@value='Go to My Favorites']")));
             firstArticlePage.WindowOperationStatus = new WindowOperationStatus(page.driver);
             firstArticlePage.WindowOperationStatus.GoToFavoritesButton.Click();
-            return new MyFavoritesArticlesPage(firstArticlePage.driver);
+            return new MyFoldersPage(firstArticlePage.driver);
         }
 
-        public static bool IsArticleInFavorites(this MyFavoritesArticlesPage page, string articleName)
+        public static MyFoldersPage GoFolder(this MyFoldersPage page, string folderName)
+        {
+            page.GetFolder(folderName).Click();
+            return page;
+        }
+
+        public static bool IsArticleInFavorites(this MyFoldersPage page, string articleName)
         {
             bool result = true;
             try
@@ -93,24 +102,74 @@ namespace Pages
             return result;
         }
 
-        public static void DeleteFolder(this MyFavoritesArticlesPage page)
+        public static void DeleteFolder(this MyFoldersPage page)
         {
-            page.DeleteLink.Click();
+            page.DeleteFolderLink.Click();
             page.WindowDeleteFolder = new WindowDeleteFolder(page.driver);
             page.WindowDeleteFolder.DeleteButton.Click();
         }
 
         public static void CreateNewFolder(WindowAddToFolder window, string folderName)
         {
+            window.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//div[@class='wk-modal-body'])[1]")));
+            window.NewFolderRadioButton.Click();
             window.NewFolderLabel.Click();
             window.InputFolderNameTextbox.SendKeys(folderName);
         }
 
         public static SearchingPage Search(this JournalPage page, string word)
         {
+            page.Wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(@"//button[@id='btnGlobalSearchMagnifier']")));
+            page.SearchBox.Clear();
             page.SearchBox.SendKeys(word);
             page.SearchButton.Click();
             return new SearchingPage(page.driver);
+        }
+
+        public static SearchingPage Save(this SearchingPage page,string nameOfSave)
+        {
+            page.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//div[@class='searchFacets']")));
+            page.SaveButton.Click();
+            page.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"(//div[@class='wk-modal-body'])[1]")));
+            WindowSaveSearch window = new WindowSaveSearch(page.driver);
+            window.SearchNameTextBox.SendKeys(nameOfSave);
+            window.SaveSearchButton.Click();
+            page.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//span[contains(text(),'has been successfully saved')]")));
+            window.CloseWindowButton.Click();
+            return page;
+        }
+
+        public static MyFoldersPage GoToSavedSearchesResultsPage(this SearchingPage page)
+        {
+            page.Wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(@"//span[contains(@id,'UserActionsToolbar_lblAccount')]")));
+            page.UserActionToolBar.Click();
+            page.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//a[contains(@id,'ucUserActionsToolbar_lnkSavedSearches')]")));
+            page.SaveFolderToolBarButton.Click();
+            return new MyFoldersPage(page.driver);
+        }
+
+        public static SearchingPage GoToSearchpage(this MyFoldersPage page, string name)
+        {
+            page.GetLinkForSearch(name).Click();
+            return new SearchingPage(page.driver);
+        }
+
+        public static bool IsSearchSuccessful(this MyFoldersPage page,string nameSearch,string wordSearch)
+        {
+            SearchingPage searchingPage = page.GoToSearchpage(nameSearch);
+            searchingPage.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//div[@id='main-container-content']")));
+            bool result = searchingPage.driver.FindElement(By.XPath(@"//div[@class='searchUserKeywords']")).Text.Contains(wordSearch);
+            MyFoldersPage folderPage = searchingPage.GoToSavedSearchesResultsPage();
+            folderPage.DeleteSearch(nameSearch);
+            return result; 
+        }
+
+        public static void DeleteSearch(this MyFoldersPage page, string searchName)
+        {
+            page.GetDeleteLinkForSearch(searchName).Click();
+            page.DeleteButton.Click();
+            page.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//span[contains(@id,'ucDeleteSavedSearchItem_searchNameMessage')]")));
+            page.ClosePopUp.Click();
         }
 
         public static bool IsResultsCountMoreThanHundred(this SearchingPage page)
@@ -123,18 +182,24 @@ namespace Pages
         {
             return page.SearchingResults.Count == 60;
         }
-        
-        //WAIT loading the second page
+
+        public static bool IsArticleInSearchResults(this SearchingPage page, string articleName)
+        {
+            page.Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@"//div[@class='searchContent']")));
+            return page.driver.FindElements(By.XPath(string.Concat("//article//a[text()='", articleName, "']"))).Count > 0;
+        }
+
+        //WAIT loading the second page!!!!
         public static SearchingPage ChooseNumberOfPage(this SearchingPage page,string pageNumber)
         {
-            page.GetNumberPageOfSearch(pageNumber).Click();
-            //page.Wait.Until(ExpectedConditions.TextToBePresentInElement(page.driver.FindElement(By.XPath("//a[@class='selectedpage']")), pageNumber));
+            page.Wait.Until(ExpectedConditions.ElementExists(By.XPath(@"//section[@id='wpPagingControl']")));
+            page.GetNumberPageOfSearch(pageNumber).Click(); 
             return page;
         }
 
         public static void Close(this BasePage page)
         {
-            page.driver.Close();
+            page.driver.Quit();
         }
 
         private static IWebElement GetJournalByName(this LoginPage page, string name)
@@ -152,6 +217,11 @@ namespace Pages
             return page.driver.FindElement(By.XPath(string.Concat("//a[@title='",articleName,"']//ancestor::div[1]//a[contains(@onclick,'addToMyCollectionsLinkClicked')]")));
         }
 
+        private static IWebElement GetFolder(this MyFoldersPage page, string folderName)
+        {
+            return page.driver.FindElement(By.XPath(string.Concat("//tr//a[text()='", folderName, "']")));
+        }
+
         private static IWebElement GetArticleLinkByName(this JournalPage page, string articleName)
         {
             return page.driver.FindElement(By.XPath(string.Concat("//a[@title='", articleName, "']")));
@@ -160,6 +230,16 @@ namespace Pages
         private static IWebElement GetNumberPageOfSearch(this SearchingPage page,string number)
         {
             return page.driver.FindElement(By.XPath(string.Concat("//div[@class='pagenumbers']/a[text()='",number, "']")));
+        }
+
+        private static IWebElement GetDeleteLinkForSearch(this MyFoldersPage page, string name)
+        {
+            return page.driver.FindElement(By.XPath(string.Concat("//a[contains(@onclick,'", name, "') and contains(text(),'Delete')]")));
+        }
+
+        private static IWebElement GetLinkForSearch(this MyFoldersPage page, string name)
+        {
+            return page.driver.FindElement(By.XPath(string.Concat("//a[contains(@id,'linkMySearch') and text()='", name, "']")));
         }
     }
 }
